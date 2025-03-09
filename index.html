@@ -3,107 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NextGen Writer - Web Version</title>
+    <title>NextGen Office</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div id="app">
-        <!-- Toolbar -->
-        <div id="toolbar">
-            <button onclick="showNewDocumentMenu()">New</button>
-            <button onclick="showFileManager('open')">Open</button>
-            <button onclick="showFileManager('save')">Save As</button>
-            <button onclick="addImage()">Add Image</button>
-            <button onclick="showToolsMenu()">Tools</button>
-            <button onclick="showPageManagement()">Page Mgmt</button>
-            <button onclick="showHelp()">Help</button>
-            <span id="user-label">Not logged in</span>
-            <button onclick="logout()" id="logout-btn" disabled>Logout</button>
+        <!-- Top Bar -->
+        <div id="top-bar">
+            <button id="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <span id="app-title">NextGen Office</span>
+            <span id="user-status">Not logged in</span>
         </div>
 
-        <!-- Edit Tools -->
-        <div id="edit-tools">
-            <button id="pen-button" onclick="showPenOptions()">Pen: Red, 2</button>
-            <button id="highlighter-button" onclick="setTool('highlighter')">Highlighter</button>
-            <button id="eraser-button" onclick="showEraserOptions()">Eraser</button>
-            <button onclick="insertWatermark()">Insert Watermark</button>
-            <button onclick="showFormatOptions()">Format</button>
-            <button onclick="undoAnnotation()">Undo</button>
-            <button onclick="redoAnnotation()">Redo</button>
-            <button onclick="prevPage()">Prev Page</button>
-            <button onclick="nextPage()">Next Page</button>
-            <button onclick="exitTeaching()">Exit Teaching</button>
-            <button onclick="saveTeaching()">Save Teaching</button>
+        <!-- Sidebar -->
+        <div id="sidebar">
+            <div class="sidebar-item" onclick="switchModule('writer')"><i class="icon">📝</i> Writer</div>
+            <div class="sidebar-item" onclick="switchModule('sheets')"><i class="icon">📊</i> Sheets</div>
+            <div class="sidebar-item" onclick="switchModule('slides')"><i class="icon">🎥</i> Slides</div>
+            <div class="sidebar-item" onclick="switchModule('pdf')"><i class="icon">📄</i> PDF</div>
         </div>
 
-        <!-- Content Area -->
-        <div id="content-area">
-            <div id="editor-area">
-                <div id="editor-content">
-                    <div id="text-input" contenteditable="true" oninput="onTextChange()"></div>
-                    <canvas id="annotation-canvas"></canvas>
-                </div>
-                <div id="page-indicator">Page 1 of 1</div>
+        <!-- Main Content -->
+        <div id="main-content">
+            <div id="writer-area" class="module">
+                <div contenteditable="true" id="writer-content" oninput="saveContent('writer')"></div>
+                <canvas id="annotation-canvas"></canvas>
             </div>
-            <div id="spreadsheet-area" style="display: none;">
-                <div id="spreadsheet-grid"></div>
-                <div>
-                    <button onclick="addSpreadsheetRow()">Add Row</button>
-                    <button onclick="addSpreadsheetColumn()">Add Column</button>
-                </div>
+            <div id="sheets-area" class="module" style="display: none;">
+                <div id="sheets-grid"></div>
             </div>
-            <div id="presentation-area" style="display: none;">
-                <div id="slide-grid"></div>
+            <div id="slides-area" class="module" style="display: none;">
+                <div id="slides-grid"></div>
+            </div>
+            <div id="pdf-area" class="module" style="display: none;">
+                <canvas id="pdf-canvas"></canvas>
             </div>
         </div>
-    </div>
 
-    <!-- Modals -->
-    <div id="login-modal" class="modal">
-        <div class="modal-content">
-            <h2>Login</h2>
-            <input type="text" id="login-username" placeholder="Username">
-            <input type="password" id="login-password" placeholder="Password">
-            <button onclick="login()">Login</button>
-            <button onclick="showSignupModal()">Sign Up</button>
+        <!-- Bottom Toolbar -->
+        <div id="bottom-toolbar">
+            <button onclick="boldText()">B</button>
+            <button onclick="italicText()">I</button>
+            <button onclick="underlineText()">U</button>
+            <button onclick="saveFile()">💾</button>
         </div>
-    </div>
 
-    <div id="signup-modal" class="modal">
-        <div class="modal-content">
-            <h2>Sign Up</h2>
-            <input type="text" id="signup-username" placeholder="Username">
-            <input type="password" id="signup-password" placeholder="Password">
-            <button onclick="signup()">Sign Up</button>
-            <button onclick="closeModal('signup-modal')">Cancel</button>
+        <!-- Floating Action Button for Collaboration -->
+        <button id="collab-btn" onclick="toggleCollab()">💬</button>
+        <div id="collab-panel" class="modal">
+            <div class="modal-content">
+                <h3>Collaborators</h3>
+                <div id="collab-users"></div>
+                <textarea id="chat" placeholder="Type message..."></textarea>
+                <button onclick="sendChat()">Send</button>
+            </div>
         </div>
-    </div>
 
-    <div id="file-manager-modal" class="modal">
-        <div class="modal-content">
-            <h2>File Manager</h2>
-            <div id="file-list"></div>
-            <div>
-                <button onclick="newFolder()">New Folder</button>
-                <button onclick="saveFile()">Save File</button>
-                <button onclick="deleteFile()">Delete</button>
-                <button onclick="goBack()">Back</button>
-                <button onclick="closeModal('file-manager-modal')">Close</button>
+        <!-- Login Modal -->
+        <div id="login-modal" class="modal">
+            <div class="modal-content">
+                <h2>Login</h2>
+                <input type="text" id="login-username" placeholder="Username">
+                <input type="password" id="login-password" placeholder="Password">
+                <button onclick="login()">Login</button>
             </div>
         </div>
     </div>
 
-    <div id="dropdown-menu" class="dropdown"></div>
-    <div id="popup-modal" class="modal">
-        <div class="modal-content">
-            <h2 id="popup-title"></h2>
-            <p id="popup-message"></p>
-            <button onclick="closeModal('popup-modal')">Close</button>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.0/dist/tesseract.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
