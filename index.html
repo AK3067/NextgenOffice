@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NextGen Writer - Web Version</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Toolbar -->
+        <div id="toolbar">
+            <button onclick="showNewDocumentMenu()">New</button>
+            <button onclick="showFileManager('open')">Open</button>
+            <button onclick="showFileManager('save')">Save As</button>
+            <button onclick="addImage()">Add Image</button>
+            <button onclick="showToolsMenu()">Tools</button>
+            <button onclick="showPageManagement()">Page Mgmt</button>
+            <button onclick="showHelp()">Help</button>
+            <span id="user-label">Not logged in</span>
+            <button onclick="logout()" id="logout-btn" disabled>Logout</button>
+        </div>
+
+        <!-- Edit Tools -->
+        <div id="edit-tools">
+            <button id="pen-button" onclick="showPenOptions()">Pen: Red, 2</button>
+            <button id="highlighter-button" onclick="setTool('highlighter')">Highlighter</button>
+            <button id="eraser-button" onclick="showEraserOptions()">Eraser</button>
+            <button onclick="insertWatermark()">Insert Watermark</button>
+            <button onclick="showFormatOptions()">Format</button>
+            <button onclick="undoAnnotation()">Undo</button>
+            <button onclick="redoAnnotation()">Redo</button>
+            <button onclick="prevPage()">Prev Page</button>
+            <button onclick="nextPage()">Next Page</button>
+            <button onclick="exitTeaching()">Exit Teaching</button>
+            <button onclick="saveTeaching()">Save Teaching</button>
+        </div>
+
+        <!-- Content Area -->
+        <div id="content-area">
+            <div id="editor-area">
+                <div id="editor-content">
+                    <div id="text-input" contenteditable="true" oninput="onTextChange()"></div>
+                    <canvas id="annotation-canvas"></canvas>
+                </div>
+                <div id="page-indicator">Page 1 of 1</div>
+            </div>
+            <div id="spreadsheet-area" style="display: none;">
+                <div id="spreadsheet-grid"></div>
+                <div>
+                    <button onclick="addSpreadsheetRow()">Add Row</button>
+                    <button onclick="addSpreadsheetColumn()">Add Column</button>
+                </div>
+            </div>
+            <div id="presentation-area" style="display: none;">
+                <div id="slide-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <h2>Login</h2>
+            <input type="text" id="login-username" placeholder="Username">
+            <input type="password" id="login-password" placeholder="Password">
+            <button onclick="login()">Login</button>
+            <button onclick="showSignupModal()">Sign Up</button>
+        </div>
+    </div>
+
+    <div id="signup-modal" class="modal">
+        <div class="modal-content">
+            <h2>Sign Up</h2>
+            <input type="text" id="signup-username" placeholder="Username">
+            <input type="password" id="signup-password" placeholder="Password">
+            <button onclick="signup()">Sign Up</button>
+            <button onclick="closeModal('signup-modal')">Cancel</button>
+        </div>
+    </div>
+
+    <div id="file-manager-modal" class="modal">
+        <div class="modal-content">
+            <h2>File Manager</h2>
+            <div id="file-list"></div>
+            <div>
+                <button onclick="newFolder()">New Folder</button>
+                <button onclick="saveFile()">Save File</button>
+                <button onclick="deleteFile()">Delete</button>
+                <button onclick="goBack()">Back</button>
+                <button onclick="closeModal('file-manager-modal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="dropdown-menu" class="dropdown"></div>
+    <div id="popup-modal" class="modal">
+        <div class="modal-content">
+            <h2 id="popup-title"></h2>
+            <p id="popup-message"></p>
+            <button onclick="closeModal('popup-modal')">Close</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.0/dist/tesseract.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
